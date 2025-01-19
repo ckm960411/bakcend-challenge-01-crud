@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -32,5 +33,10 @@ export class PostController {
     @Body() post: UpdatePostRequest,
   ): PostEntity {
     return this.postService.updatePost(id, post);
+  }
+
+  @Delete(':id')
+  deletePost(@Param('id', ParseIntPipe) id: number): { id: number } {
+    return this.postService.deletePost(id);
   }
 }

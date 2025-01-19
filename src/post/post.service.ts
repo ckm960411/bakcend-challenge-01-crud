@@ -42,4 +42,15 @@ export class PostService {
 
     return post;
   }
+
+  deletePost(id: number): { id: number } {
+    const found = posts.find((post) => post.id === id);
+
+    if (!found) {
+      throw new NotFoundException('Post not found');
+    }
+
+    posts = posts.filter((post) => post.id !== id);
+    return { id };
+  }
 }

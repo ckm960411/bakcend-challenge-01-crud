@@ -3,7 +3,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PostController } from '../post/post.controller';
 import { PostService } from '../post/post.service';
 import { INestApplication } from '@nestjs/common';
-import exp from 'constants';
 import { Post } from 'src/post/post.entity';
 
 describe('PostController', () => {
@@ -89,6 +88,23 @@ describe('PostController', () => {
           updatedAt: expect.any(String),
         },
       ]);
+    });
+  });
+
+  describe('DELETE /post/:id', () => {
+    it('Post를 삭제합니다.', async () => {
+      await request(app.getHttpServer()).post('/post').send({
+        title: 'test title',
+        content: 'test content',
+      });
+
+      const deleteResponse = await request(app.getHttpServer()).delete(
+        '/post/1',
+      );
+      expect(deleteResponse.body).toEqual({ id: 1 });
+
+      const getResponse = await request(app.getHttpServer()).get('/post');
+      expect(getResponse.body).toEqual([]);
     });
   });
 });
