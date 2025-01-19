@@ -1,4 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { Post } from './post.entity';
+
+const posts: Post[] = [];
 
 @Injectable()
-export class PostService {}
+export class PostService {
+  getPosts() {
+    return posts;
+  }
+}
