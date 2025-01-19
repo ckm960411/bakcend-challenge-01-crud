@@ -21,6 +21,8 @@ describe('PostController', () => {
     await app.init();
     controller = module.get<PostController>(PostController);
     postService = module.get<PostService>(PostService);
+
+    postService.clearPosts();
   });
 
   afterAll(async () => {
@@ -55,6 +57,38 @@ describe('PostController', () => {
 
       expect(postResponse.body).toEqual(post);
       expect(getResponse.body).toEqual([post]);
+    });
+  });
+
+  describe('PATCH /post/:id', () => {
+    it('Post를 업데이트합니다.', async () => {
+      await request(app.getHttpServer()).post('/post').send({
+        title: 'test title',
+        content: 'test content',
+      });
+
+      const patchResponse = await request(app.getHttpServer())
+        .patch('/post/1')
+        .send({ content: 'updated content' });
+
+      expect(patchResponse.body).toEqual({
+        id: 1,
+        title: 'test title',
+        content: 'updated content',
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+      });
+
+      const getResponse = await request(app.getHttpServer()).get('/post');
+      expect(getResponse.body).toEqual([
+        {
+          id: 1,
+          title: 'test title',
+          content: 'updated content',
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
+        },
+      ]);
     });
   });
 });
