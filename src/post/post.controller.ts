@@ -36,7 +36,7 @@ export class PostController {
   }
 
   @Delete(':id')
-  deletePost(@Param('id', ParseIntPipe) id: number): { id: number } {
+  deletePost(@Param('id', ParseIntPipe) id: number): Promise<{ id: number }> {
     return this.postService.deletePost(id);
   }
 }

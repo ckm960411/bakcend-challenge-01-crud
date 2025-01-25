@@ -63,14 +63,16 @@ export class PostService {
     return updatedPost;
   }
 
-  deletePost(id: number): { id: number } {
-    const found = posts.find((post) => post.id === id);
+  async deletePost(id: number): Promise<{ id: number }> {
+    const post = await this.postRepository.findOne({
+      where: { id },
+    });
 
-    if (!found) {
+    if (!post) {
       throw new NotFoundException('Post not found');
     }
 
-    posts = posts.filter((post) => post.id !== id);
+    await this.postRepository.delete(id);
     return { id };
   }
 }
