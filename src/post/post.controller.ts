@@ -31,7 +31,7 @@ export class PostController {
   updatePost(
     @Param('id', ParseIntPipe) id: number,
     @Body() post: UpdatePostRequest,
-  ): PostEntity {
+  ): Promise<PostEntity> {
     return this.postService.updatePost(id, post);
   }
 

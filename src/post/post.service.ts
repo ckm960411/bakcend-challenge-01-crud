@@ -40,20 +40,27 @@ export class PostService {
     return post;
   }
 
-  updatePost(id: number, body: UpdatePostRequest): Post {
-    const post = posts.find((post) => post.id === id);
+  async updatePost(id: number, body: UpdatePostRequest): Promise<Post> {
+    const post = await this.postRepository.findOne({
+      where: { id },
+    });
 
     if (!post) {
       throw new NotFoundException('Post not found');
     }
 
-    post.title = body.title ?? post.title;
-    post.content = body.content ?? post.content;
-    post.updatedAt = new Date();
+    const updatedPost = {
+      ...post,
+      title: body.title ?? post.title,
+      content: body.content ?? post.content,
+    };
 
-    posts = posts.map((p) => (p.id === id ? post : p));
+    await this.postRepository.update(id, {
+      title: updatedPost.title,
+      content: updatedPost.content,
+    });
 
-    return post;
+    return updatedPost;
   }
 
   deletePost(id: number): { id: number } {
