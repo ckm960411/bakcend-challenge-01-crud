@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Post } from './post.entity';
 import { CreatePostRequest } from './dto/request/create-post.request';
 import { UpdatePostRequest } from './dto/request/update-post.request';
@@ -23,15 +27,16 @@ export class PostService {
     return posts;
   }
 
-  createPost({ title, content }: CreatePostRequest): Post {
-    const post: Post = {
-      id: posts.length + 1,
+  async createPost({ title, content }: CreatePostRequest): Promise<Post> {
+    if (!title || !content) {
+      throw new BadRequestException('제목과 본문은 필수 입력사항입니다.');
+    }
+
+    const post: Post = await this.postRepository.save({
       title,
       content,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    posts.push(post);
+    });
+
     return post;
   }
 

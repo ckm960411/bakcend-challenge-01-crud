@@ -23,7 +23,7 @@ export class PostController {
   }
 
   @Post()
-  createPost(@Body() post: CreatePostRequest): PostEntity {
+  createPost(@Body() post: CreatePostRequest): Promise<PostEntity> {
     return this.postService.createPost(post);
   }
 
