@@ -9,17 +9,11 @@ import { UpdatePostRequest } from './dto/request/update-post.request';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-export let posts: Post[] = [];
-
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(Post) private readonly postRepository: Repository<Post>,
   ) {}
-
-  clearPosts() {
-    posts = [];
-  }
 
   async getPosts(): Promise<Post[]> {
     const posts = await this.postRepository.find();
